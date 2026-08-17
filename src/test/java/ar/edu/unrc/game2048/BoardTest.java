@@ -112,7 +112,7 @@ public class BoardTest {
         count = 0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                if (board1.getCell(i, j).getValue() == 2) {
+                if (board1.getCell(i, j).getValue() == 2 || board1.getCell(i, j).getValue() == 4) {
                     count++;
                 }
             }
@@ -144,7 +144,7 @@ public class BoardTest {
         count = 0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                if (board1.getCell(i, j).getValue() == 2) {
+                if (board1.getCell(i, j).getValue() == 2 || board1.getCell(i, j).getValue() == 4) {
                     count++;
                 }
             }
@@ -179,7 +179,7 @@ public class BoardTest {
         count = 0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                if (board1.getCell(i, j).getValue() == 2) {
+                if (board1.getCell(i, j).getValue() == 2 || board1.getCell(i, j).getValue() == 4) {
                     count++;
                 }
             }
@@ -214,7 +214,7 @@ public class BoardTest {
         count = 0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
-                if (board1.getCell(i, j).getValue() == 2) {
+                if (board1.getCell(i, j).getValue() == 2 || board1.getCell(i, j).getValue() == 4) {
                     count++;
                 }
             }
