@@ -78,6 +78,150 @@ public class BoardTest {
         board1.setCell(1, 1, new Cell(8));
         assertTrue(board1.isLosingBoard());
     }
+    @Test
+    public void testisFull() {
+        Board board1 = new Board(2);
+        board1.setCell(0, 0, new Cell(2));
+        board1.setCell(1, 0, new Cell(4));
+        board1.setCell(0, 1, new Cell(2));
+        board1.setCell(1, 1, new Cell(8));
+        assertTrue(board1.isFull());
+    }
+
+    @Test
+    public void testMoveUp() {
+        Board board1 = new Board(2);
+
+        board1.setCell(0, 0, Cell.EMPTY);
+        board1.setCell(0, 1, Cell.EMPTY);
+        board1.setCell(1, 0, new Cell(2));
+        board1.setCell(1, 1, new Cell(2));
+
+        board1.moveUp();
+
+        int count = 0;
+        for (int i = 0; i < 2; i++) {
+            int cellValue = board1.getCell(0, i).getValue();
+            if (cellValue == 2) {
+                count++;
+            }
+        }
+
+        assertEquals(count, 2);
+
+        count = 0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (board1.getCell(i, j).getValue() == 2) {
+                    count++;
+                }
+            }
+        }
+
+        assertEquals(count, 3);
+    }
+
+    @Test
+    public void testMoveDown() {
+        Board board1 = new Board(2);
+
+        board1.setCell(0, 0, new Cell(2));
+        board1.setCell(0, 1, new Cell(2));
+        board1.setCell(1, 0, Cell.EMPTY);
+        board1.setCell(1, 1, Cell.EMPTY);
+        board1.moveDown();
+
+        int count = 0;
+        for (int i = 0; i < 2; i++) {
+            int cellValue = board1.getCell(1, i).getValue();
+            if (cellValue == 2) {
+                count++;
+            }
+        }
+
+        assertEquals(count, 2);
+
+        count = 0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (board1.getCell(i, j).getValue() == 2) {
+                    count++;
+                }
+            }
+        }
+
+        assertEquals(count, 3);
+    }
+
+    @Test
+    public void testMoveLeft() {
+        Board board1 = new Board(2);
+
+        board1.setCell(0, 0, Cell.EMPTY);
+        board1.setCell(0, 1, new Cell(2));
+        board1.setCell(1, 0, Cell.EMPTY);
+        board1.setCell(1, 1, new Cell(2));
+
+        board1.moveLeft();
+
+        int count = 0;
+
+        if (board1.getCell(0, 0).getValue() == 2) {
+            count++;
+        }
+
+        if (board1.getCell(1, 0).getValue() == 2) {
+            count++;
+        }
+
+        assertEquals(count, 2);
+
+        count = 0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (board1.getCell(i, j).getValue() == 2) {
+                    count++;
+                }
+            }
+        }
+
+        assertEquals(count, 3);
+    }
+
+    @Test
+    public void testMoveRight() {
+        Board board1 = new Board(2);
+
+        board1.setCell(0, 0, new Cell(2));
+        board1.setCell(0, 1, Cell.EMPTY);
+        board1.setCell(1, 0, new Cell(2));
+        board1.setCell(1, 1, Cell.EMPTY);
+
+        board1.moveRight();
+
+        int count = 0;
+
+        if (board1.getCell(0, 1).getValue() == 2) {
+            count++;
+        }
+
+        if (board1.getCell(1, 1).getValue() == 2) {
+            count++;
+        }
+
+        assertEquals(count, 2);
+
+        count = 0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (board1.getCell(i, j).getValue() == 2) {
+                    count++;
+                }
+            }
+        }
+
+        assertEquals(count, 3);
+    }
 
     /*
      * ESTE TEST NO PASA POR QUE NO FUNCIONA BIEN EL PROGRAMA?, CHEQUEA LOS MAS A LA
