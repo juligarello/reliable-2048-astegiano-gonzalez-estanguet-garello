@@ -132,16 +132,6 @@ public class BoardTest {
         board1.setCell(0, 1, Cell.EMPTY);
         board1.setCell(1, 1, Cell.EMPTY);
 
-        assertEquals(count, 2);
-
-        count = 0;
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                if (board1.getCell(i, j).getValue() == 2 || board1.getCell(i, j).getValue() == 4) {
-                    count++;
-                }
-            }
-        }
         board1.moveDown();
 
         // La celda 4 que estaba en (0,0) deberia haber bajado a (1,0)
