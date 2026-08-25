@@ -37,6 +37,7 @@ public class CellTest {
         Cell cell3 = new Cell(4);
         Cell cell4 = new Cell(0);
 
+        assertFalse(cell1.canMergeWith(null));
         assertTrue(cell1.canMergeWith(cell2));
         assertFalse(cell1.canMergeWith(cell3));
         assertFalse(cell1.canMergeWith(cell4));
@@ -95,5 +96,12 @@ public class CellTest {
         assertEquals(".", cell1.toString());
         assertEquals("4", cell2.toString());
         assertEquals("8", cell3.toString());
+    }
+
+    @Test
+    public void testConstructorWithOne() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Cell(1);
+        });
     }
 }
