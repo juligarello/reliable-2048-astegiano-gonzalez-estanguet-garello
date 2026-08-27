@@ -32,15 +32,20 @@ public class CellTest {
 
     @Test
     public void testCanMergeWith(){
-        Cell cell1 = new Cell(2);
-        Cell cell2 = new Cell(2);
-        Cell cell3 = new Cell(4);
-        Cell cell4 = new Cell(0);
+        assertThrows(NullPointerException.class, () -> {
+            Cell cell1 = new Cell(0);
 
-        assertFalse(cell1.canMergeWith(null));
-        assertTrue(cell1.canMergeWith(cell2));
-        assertFalse(cell1.canMergeWith(cell3));
-        assertFalse(cell1.canMergeWith(cell4));
+            cell1.mergeWith(null);
+        });
+
+        Cell cell2 = new Cell(2);
+        Cell cell3 = new Cell(2);
+        Cell cell4 = new Cell(4);
+        Cell cell5 = new Cell(0);
+
+        assertTrue(cell2.canMergeWith(cell3));
+        assertFalse(cell2.canMergeWith(cell5));
+        assertFalse(cell2.canMergeWith(cell4));
     }
 
     @Test

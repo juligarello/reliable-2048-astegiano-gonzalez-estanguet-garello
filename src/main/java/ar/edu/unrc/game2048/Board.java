@@ -192,7 +192,7 @@ public class Board {
     public boolean isWinningBoard() {
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
-                if (grid[r][c].getValue() == WINNING_VALUE) {
+                if (grid[r][c].getValue() >= WINNING_VALUE) {
                     return true;
                 }
             }
@@ -312,7 +312,7 @@ public class Board {
         for (int col = 0; col < size; col++) {
             // Create a list of cells from bottom to top (reverse order)
             List<Cell> column = new ArrayList<>();
-            for (int row = size - 1; row > 0; row--) {
+            for (int row = size - 1; row >= 0; row--) {
                 column.add(grid[row][col]);
             }
 
