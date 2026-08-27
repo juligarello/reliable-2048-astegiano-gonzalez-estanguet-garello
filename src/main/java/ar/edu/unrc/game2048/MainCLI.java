@@ -1,4 +1,4 @@
-git package ar.edu.unrc.game2048;
+package ar.edu.unrc.game2048;
 
 import java.util.Scanner;
 
