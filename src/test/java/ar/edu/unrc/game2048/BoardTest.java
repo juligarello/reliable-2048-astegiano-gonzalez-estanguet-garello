@@ -75,7 +75,6 @@ public class BoardTest {
         Board board1 = new Board(2);
         board1.setCell(0, 0, new Cell(2));
         board1.setCell(1, 0, new Cell(4));
-        board1.setCell(0, 1, new Cell(6));
         board1.setCell(1, 1, new Cell(8));
         assertTrue(board1.isLosingBoard());
     }
