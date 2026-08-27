@@ -224,7 +224,14 @@ public class BoardTest {
         board1.setCell(0, 1, new Cell(2));
         board1.setCell(1, 1, new Cell(8));
         board1.moveRight();
-        assertFalse(board1.isLosingBoard());
+        int valorAgregado = board1.getCell(0, 0).getValue();
+
+        if (valorAgregado == 4) {
+            assertFalse(board1.isLosingBoard());
+        } else {
+
+            assertTrue(board1.isLosingBoard());
+        }
     }
 
     @Test
