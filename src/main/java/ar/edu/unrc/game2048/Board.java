@@ -217,7 +217,7 @@ public class Board {
             for (int c = 0; c < size; c++) {
                 Cell current = grid[r][c];
                 // Check right neighbor
-                if (c + 1 < size  && current.canMergeWith(grid[r][c + 1])) {
+                if (c + 1 < size && current.canMergeWith(grid[r][c + 1])) {
                     return false;
                 }
 
@@ -258,13 +258,7 @@ public class Board {
                 column.add(grid[row][col]);
             }
 
-            // Remove empty cells (slide up)
-            List<Cell> nonEmpty = new ArrayList<>();
-            for (Cell cell : column) {
-                if (!cell.isEmpty()) {
-                    nonEmpty.add(cell);
-                }
-            }
+            List<Cell> nonEmpty = nonEmpty(column);
 
             // Merge adjacent equal cells
             List<Cell> merged = new ArrayList<>();
@@ -316,13 +310,7 @@ public class Board {
                 column.add(grid[row][col]);
             }
 
-            // Remove empty cells
-            List<Cell> nonEmpty = new ArrayList<>();
-            for (Cell cell : column) {
-                if (!cell.isEmpty()) {
-                    nonEmpty.add(cell);
-                }
-            }
+            List<Cell> nonEmpty = nonEmpty(column);
 
             // Merge adjacent equal cells
             List<Cell> merged = new ArrayList<>();
@@ -374,13 +362,7 @@ public class Board {
                 rowList.add(grid[row][col]);
             }
 
-            // Remove empty cells
-            List<Cell> nonEmpty = new ArrayList<>();
-            for (Cell cell : rowList) {
-                if (!cell.isEmpty()) {
-                    nonEmpty.add(cell);
-                }
-            }
+            List<Cell> nonEmpty = nonEmpty(rowList);
 
             // Merge adjacent equal cells
             List<Cell> merged = new ArrayList<>();
@@ -432,13 +414,7 @@ public class Board {
                 rowList.add(grid[row][col]);
             }
 
-            // Remove empty cells
-            List<Cell> nonEmpty = new ArrayList<>();
-            for (Cell cell : rowList) {
-                if (!cell.isEmpty()) {
-                    nonEmpty.add(cell);
-                }
-            }
+            List<Cell> nonEmpty = nonEmpty(rowList);
 
             // Merge adjacent equal cells
             List<Cell> merged = new ArrayList<>();
@@ -472,6 +448,17 @@ public class Board {
             addRandomTile(); // Add new random tile after successful move
         }
         return moved;
+    }
+
+    // Remove empty cells
+    private List<Cell> nonEmpty(List<Cell> list) {
+        List<Cell> nonEmpty = new ArrayList<>();
+        for (Cell cell : list) {
+            if (!cell.isEmpty()) {
+                nonEmpty.add(cell);
+            }
+        }
+        return nonEmpty;
     }
 
     // ==================== RANDOM TILE ADDITION (PRIVATE) ====================
