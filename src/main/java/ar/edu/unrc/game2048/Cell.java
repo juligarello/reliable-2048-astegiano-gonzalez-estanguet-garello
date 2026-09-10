@@ -34,7 +34,14 @@ public final class Cell {
         if (value < 0) {
             throw new IllegalArgumentException("Cell value cannot be negative: " + value);
         }
+        if(value != 0 && !esPotenciaDeDos(value)) {
+            throw new IllegalArgumentException("Cell value must be a power of 2 ");
+        }
         this.value = value;
+    }
+
+    private boolean esPotenciaDeDos(int x){
+        return x >= 2 && (x & (x - 1)) == 0;
     }
     
     /**
@@ -63,6 +70,9 @@ public final class Cell {
      * @return true if the cells can merge, false otherwise
      */
     public boolean canMergeWith(Cell other) {
+        if (other == null) {
+            throw new NullPointerException();
+        }
         if (this.isEmpty() && other.isEmpty()) {
             return false;
         }

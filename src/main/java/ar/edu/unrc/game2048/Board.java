@@ -32,7 +32,8 @@ public class Board {
     private final int size;
 
     /**
-     * Contents of the board: a 2D array of Cells. grid[row][col] represents the cell at (row, col).
+     * Contents of the board: a 2D array of Cells. grid[row][col] represents the
+     * cell at (row, col).
      */
     private final Cell[][] grid;
 
@@ -127,11 +128,11 @@ public class Board {
     /**
      * Sets a cell at the specified position.
      *
-     * @param row the row index (0-based)
-     * @param col the column index (0-based)
+     * @param row  the row index (0-based)
+     * @param col  the column index (0-based)
      * @param cell the cell to set (must not be null)
      * @throws IndexOutOfBoundsException if row or col is out of bounds
-     * @throws IllegalArgumentException if cell is null
+     * @throws IllegalArgumentException  if cell is null
      */
     public void setCell(int row, int col, Cell cell) {
         validatePosition(row, col);
@@ -152,8 +153,7 @@ public class Board {
         if (row < 0 || row >= size || col < 0 || col >= size) {
             throw new IndexOutOfBoundsException(
                     String.format("Position (%d, %d) is out of bounds for board size %d",
-                            row, col, size)
-            );
+                            row, col, size));
         }
     }
 
@@ -192,7 +192,7 @@ public class Board {
     public boolean isWinningBoard() {
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
-                if (grid[r][c].getValue() == WINNING_VALUE) {
+                if (grid[r][c].getValue() >= WINNING_VALUE) {
                     return true;
                 }
             }
@@ -217,9 +217,10 @@ public class Board {
             for (int c = 0; c < size; c++) {
                 Cell current = grid[r][c];
                 // Check right neighbor
-                if (c + 1 < size - 1 && current.canMergeWith(grid[r][c + 1])) {
+                if (c + 1 < size && current.canMergeWith(grid[r][c + 1])) {
                     return false;
                 }
+
                 // Check down neighbor
                 if (r + 1 < size && current.canMergeWith(grid[r + 1][c])) {
                     return false;
@@ -238,7 +239,8 @@ public class Board {
         return !hasEmptyCells();
     }
 
-    // ==================== MOVE OPERATIONS (WITH DESIGN PROBLEMS) ====================
+    // ==================== MOVE OPERATIONS (WITH DESIGN PROBLEMS)
+    // ====================
 
     /**
      * Moves all tiles upward.
@@ -256,13 +258,7 @@ public class Board {
                 column.add(grid[row][col]);
             }
 
-            // Remove empty cells (slide up)
-            List<Cell> nonEmpty = new ArrayList<>();
-            for (Cell cell : column) {
-                if (!cell.isEmpty()) {
-                    nonEmpty.add(cell);
-                }
-            }
+            List<Cell> nonEmpty = nonEmpty(column);
 
             // Merge adjacent equal cells
             List<Cell> merged = new ArrayList<>();
@@ -310,17 +306,11 @@ public class Board {
         for (int col = 0; col < size; col++) {
             // Create a list of cells from bottom to top (reverse order)
             List<Cell> column = new ArrayList<>();
-            for (int row = size - 1; row > 0; row--) {
+            for (int row = size - 1; row >= 0; row--) {
                 column.add(grid[row][col]);
             }
 
-            // Remove empty cells
-            List<Cell> nonEmpty = new ArrayList<>();
-            for (Cell cell : column) {
-                if (!cell.isEmpty()) {
-                    nonEmpty.add(cell);
-                }
-            }
+            List<Cell> nonEmpty = nonEmpty(column);
 
             // Merge adjacent equal cells
             List<Cell> merged = new ArrayList<>();
@@ -372,13 +362,7 @@ public class Board {
                 rowList.add(grid[row][col]);
             }
 
-            // Remove empty cells
-            List<Cell> nonEmpty = new ArrayList<>();
-            for (Cell cell : rowList) {
-                if (!cell.isEmpty()) {
-                    nonEmpty.add(cell);
-                }
-            }
+            List<Cell> nonEmpty = nonEmpty(rowList);
 
             // Merge adjacent equal cells
             List<Cell> merged = new ArrayList<>();
@@ -430,13 +414,7 @@ public class Board {
                 rowList.add(grid[row][col]);
             }
 
-            // Remove empty cells
-            List<Cell> nonEmpty = new ArrayList<>();
-            for (Cell cell : rowList) {
-                if (!cell.isEmpty()) {
-                    nonEmpty.add(cell);
-                }
-            }
+            List<Cell> nonEmpty = nonEmpty(rowList);
 
             // Merge adjacent equal cells
             List<Cell> merged = new ArrayList<>();
@@ -470,6 +448,17 @@ public class Board {
             addRandomTile(); // Add new random tile after successful move
         }
         return moved;
+    }
+
+    // Remove empty cells
+    private List<Cell> nonEmpty(List<Cell> list) {
+        List<Cell> nonEmpty = new ArrayList<>();
+        for (Cell cell : list) {
+            if (!cell.isEmpty()) {
+                nonEmpty.add(cell);
+            }
+        }
+        return nonEmpty;
     }
 
     // ==================== RANDOM TILE ADDITION (PRIVATE) ====================
@@ -509,8 +498,10 @@ public class Board {
      */
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         Board board = (Board) o;
         return size == board.size &&
                 score == board.score &&
@@ -537,8 +528,7 @@ public class Board {
             }
             sb.append("\n|");
             for (int c = 0; c < size; c++) {
-                String val = grid[r][c].isEmpty() ? "     " :
-                        String.format("%5d", grid[r][c].getValue());
+                String val = grid[r][c].isEmpty() ? "     " : String.format("%5d", grid[r][c].getValue());
                 sb.append(val).append("|");
             }
             sb.append("\n");
@@ -574,8 +564,10 @@ public class Board {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
             Position position = (Position) o;
             return row == position.row && col == position.col;
         }
