@@ -145,6 +145,64 @@ public class BoardTest {
         }
 
         assertEquals(count, 3);
+        //Probar columnas que puedan mergear, que no tengan
+        //que merrgear y que no puedan mergear
+
+        Board board2 = new Board(4);
+
+        //Columna 1
+        board2.setCell(0, 0, Cell.EMPTY);
+        board2.setCell(1, 0, Cell.EMPTY);
+        board2.setCell(2, 0, new Cell(2));
+        board2.setCell(3, 0, new Cell(2));
+
+        //Columna 2
+        board2.setCell(0, 1, new Cell (2));
+        board2.setCell(1, 1, Cell.EMPTY);
+        board2.setCell(2, 1, Cell.EMPTY);
+        board2.setCell(3, 1, new Cell(2));
+
+        //Columna 3
+        board2.setCell(0, 2, Cell.EMPTY);
+        board2.setCell(1, 2, Cell.EMPTY);
+        board2.setCell(2, 2, Cell.EMPTY);
+        board2.setCell(3, 2, new Cell(2));
+
+        //Columna 4
+        board2.setCell(0, 3, new Cell(2));
+        board2.setCell(1, 3, new Cell(4));
+        board2.setCell(2, 3, new Cell(8));
+        board2.setCell(3, 3, new Cell(16));
+
+        board2.moveUp();
+
+
+        count = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (!board2.getCell(i, j).isEmpty()) {
+                    count++;
+                }
+            }
+        }
+
+        assertEquals(count, 8);
+
+        // PROBAR CUANDO UN MOVEUP NO DEBERIA CAMBIAR EL TABLERO
+        Board board3 = new Board(2);
+        board3.setCell(0, 0, new Cell(2));
+        board3.setCell(1, 0, Cell.EMPTY);
+        board3.setCell(0, 1, new Cell(2));
+        board3.setCell(1, 1, Cell.EMPTY);
+
+        Board board4 = new Board(2);
+        board4.setCell(0, 0, new Cell(2));
+        board4.setCell(1, 0, Cell.EMPTY);
+        board4.setCell(0, 1, new Cell(2));
+        board4.setCell(1, 1, Cell.EMPTY);
+
+        board3.moveUp();
+        assertEquals(board3, board4);
     }
 
     @Test
@@ -159,6 +217,64 @@ public class BoardTest {
         board1.moveDown();
 
         assertEquals(4, board1.getCell(1, 0).getValue());
+
+        //Probar columnas que puedan mergear, que no tengan
+        //que merrgear y que no puedan mergear
+
+        Board board2 = new Board(4);
+
+        //Columna 1
+        board2.setCell(0, 0, Cell.EMPTY);
+        board2.setCell(1, 0, Cell.EMPTY);
+        board2.setCell(2, 0, new Cell(2));
+        board2.setCell(3, 0, new Cell(2));
+
+        //Columna 2
+        board2.setCell(0, 1, new Cell (2));
+        board2.setCell(1, 1, Cell.EMPTY);
+        board2.setCell(2, 1, Cell.EMPTY);
+        board2.setCell(3, 1, new Cell(2));
+
+        //Columna 3
+        board2.setCell(0, 2, Cell.EMPTY);
+        board2.setCell(1, 2, Cell.EMPTY);
+        board2.setCell(2, 2, Cell.EMPTY);
+        board2.setCell(3, 2, new Cell(2));
+
+        //Columna 4
+        board2.setCell(0, 3, new Cell(2));
+        board2.setCell(1, 3, new Cell(4));
+        board2.setCell(2, 3, new Cell(8));
+        board2.setCell(3, 3, new Cell(16));
+
+        board2.moveDown();
+
+        int count = 0;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (!board2.getCell(i, j).isEmpty()) {
+                    count++;
+                }
+            }
+        }
+
+        assertEquals(count, 8);
+
+        // PROBAR CUANDO UN MOVEUP NO DEBERIA CAMBIAR EL TABLERO
+        Board board3 = new Board(2);
+        board3.setCell(0, 0, Cell.EMPTY);
+        board3.setCell(1, 0, new Cell(2));
+        board3.setCell(0, 1, Cell.EMPTY);
+        board3.setCell(1, 1, new Cell(2));
+
+        Board board4 = new Board(2);
+        board4.setCell(0, 0, Cell.EMPTY);
+        board4.setCell(1, 0, new Cell(2));
+        board4.setCell(0, 1, Cell.EMPTY);
+        board4.setCell(1, 1, new Cell(2));
+
+        board3.moveDown();
+        assertEquals(board3, board4);
     }
 
     @Test
