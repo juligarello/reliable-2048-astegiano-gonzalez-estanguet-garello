@@ -36,6 +36,9 @@ public class BoardTest {
         });
     }
 
+
+    // SetCell
+
     @Test
     public void testSetCell() {
         Board board1 = new Board(4);
@@ -44,6 +47,19 @@ public class BoardTest {
             board1.setCell(0, 0, cel1);
         });
     }
+
+    @Test
+    public void testSetCell1() {
+        Board board1 = new Board(4);
+        Cell cel1 = null;
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            board1.setCell(-1, 0, cel1);
+        });
+    }
+
+
+
+
 
     @Test
     public void testGetEmptyPosition() {
@@ -79,6 +95,11 @@ public class BoardTest {
         assertTrue(board1.isLosingBoard());
     }
 
+
+
+    // FULL
+    
+    
     @Test
     public void testisFull() {
         Board board1 = new Board(2);
@@ -88,6 +109,13 @@ public class BoardTest {
         board1.setCell(1, 1, new Cell(8));
         assertTrue(board1.isFull());
     }
+     public void testisFull2() {
+        Board board1 = new Board(2);
+
+        assertFalse(board1.isFull());
+    }
+
+
 
     @Test
     public void testMoveUp() {
@@ -133,7 +161,7 @@ public class BoardTest {
 
         board1.moveDown();
 
-        // La celda 4 que estaba en (0,0) deberia haber bajado a (1,0)
+      
         assertEquals(4, board1.getCell(1, 0).getValue());
     }
 
@@ -207,13 +235,9 @@ public class BoardTest {
         assertEquals(count, 3);
     }
 
-    /*
-     * ESTE TEST NO PASA POR QUE NO FUNCIONA BIEN EL PROGRAMA?, CHEQUEA LOS MAS A LA
-     * DERECHA?
-     * O pasa que cuando corres a la derecha, se juntan los dos y forman un 4 y al
-     * quedar un nuevo dos en el
-     * tablero ya no hay posibilidad y pierde? que seria lo correcto!
-     */
+    // IslogisngBoar()
+
+
     @Test
     public void testisLosingBoard2() {
         // caso true
@@ -232,6 +256,39 @@ public class BoardTest {
             assertTrue(board1.isLosingBoard());
         }
     }
+
+    @Test
+    public void testisLosingBoard3(){
+        Board board1 = new Board(2);
+        assertFalse(board1.isLosingBoard());
+        board1.setCell(0, 0, new Cell(2));
+        board1.setCell(1, 0, new Cell(2));
+        board1.setCell(0, 1, new Cell(2));
+        board1.setCell(1, 1, new Cell(2));
+        assertFalse(board1.isLosingBoard());
+
+
+
+    }
+
+      @Test
+    public void testisLosingBoard4(){
+        Board board1 = new Board(2);
+        assertFalse(board1.isLosingBoard());
+        board1.setCell(0, 0, new Cell(2));
+        board1.setCell(1, 0, new Cell(2));
+        board1.setCell(0, 1, new Cell(4));
+        board1.setCell(1, 1, new Cell(8));
+        assertFalse(board1.isLosingBoard());
+
+
+
+    }
+
+
+
+
+    
 
     @Test
     public void testIsWinningBoardWithHigherValue() {
@@ -318,6 +375,59 @@ public class BoardTest {
         assertFalse(a.equals(b));
     }
 
+    @Test
+    public void testEqualsDifferentClass() {
+        Board board = new Board(4);
+        assertFalse(board.equals("no soy un board"));
+    }
+
+    // === Board.Position tests ===
+
+    @Test
+    public void testPositionEqualsSameReference() {
+        Board.Position posicion = new Board.Position(1, 2);
+        assertTrue(posicion.equals(posicion));
+    }
+
+    @Test
+    public void testPositionEqualsSameValues() {
+        Board.Position a = new Board.Position(1, 2);
+        Board.Position b = new Board.Position(1, 2);
+        assertTrue(a.equals(b));
+    }
+
+    @Test
+    public void testPositionEqualsNull() {
+        Board.Position posicion = new Board.Position(1, 2);
+        assertFalse(posicion.equals(null));
+    }
+
+    @Test
+    public void testPositionEqualsDifferentClass() {
+        Board.Position posicion = new Board.Position(1, 2);
+        assertFalse(posicion.equals("no soy position"));
+    }
+
+    @Test
+    public void testPositionEqualsDifferentRow() {
+        Board.Position a = new Board.Position(1, 2);
+        Board.Position b = new Board.Position(2, 2);
+        assertFalse(a.equals(b));
+    }
+
+    @Test
+    public void testPositionEqualsDifferentCol() {
+        Board.Position a = new Board.Position(1, 2);
+        Board.Position b = new Board.Position(1, 3);
+        assertFalse(a.equals(b));
+    }
+
+    @Test
+    public void testPositionToString() {
+        Board.Position posicion = new Board.Position(2, 3);
+        assertEquals("(2, 3)", posicion.toString());
+    }
+
     // === hashCode ===
 
     @Test
@@ -376,5 +486,9 @@ public class BoardTest {
         assertTrue(str.contains("8"));
         assertTrue(str.contains("16"));
     }
+
+
+
+    
 
 }
