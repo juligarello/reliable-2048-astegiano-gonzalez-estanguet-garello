@@ -10,6 +10,32 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CellTest {
 
     @Test
+    public void testPotenciaDe2() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            Cell cell = new Cell(5);
+        });
+    }
+
+    @Test
+    public void testCanMergeWith2() {
+        Cell cell2 = new Cell(0);
+        Cell cell3 = new Cell(0);
+        assertFalse(cell2.canMergeWith(cell3));
+    }
+
+    @Test
+    public void testEquals2() {
+        Cell cell = new Cell(2);
+        assertFalse(cell.equals(null));
+    }
+
+    @Test
+    public void testEquals3() {
+        Cell cell1 = new Cell(2);
+        assertFalse(cell1.equals("Hola"));
+    }
+
+    @Test
     @DisplayName("should create empty cell with value 0")
     void testEmptyCell() {
         Cell cell = new Cell(0);

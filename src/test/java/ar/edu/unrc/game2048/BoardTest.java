@@ -1,4 +1,5 @@
 package ar.edu.unrc.game2048;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,6 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardTest {
+
+    @Test
+    public void testBoardSinArgumentos() {
+        assertEquals(new Board().getSize(), 4);
+    }
 
     @Test
     public void testConstructor() {
@@ -36,7 +42,6 @@ public class BoardTest {
         });
     }
 
-
     // SetCell
 
     @Test
@@ -56,10 +61,6 @@ public class BoardTest {
             board1.setCell(-1, 0, cel1);
         });
     }
-
-
-
-
 
     @Test
     public void testGetEmptyPosition() {
@@ -95,11 +96,8 @@ public class BoardTest {
         assertTrue(board1.isLosingBoard());
     }
 
-
-
     // FULL
-    
-    
+
     @Test
     public void testisFull() {
         Board board1 = new Board(2);
@@ -109,13 +107,12 @@ public class BoardTest {
         board1.setCell(1, 1, new Cell(8));
         assertTrue(board1.isFull());
     }
-     public void testisFull2() {
+
+    public void testisFull2() {
         Board board1 = new Board(2);
 
         assertFalse(board1.isFull());
     }
-
-
 
     @Test
     public void testMoveUp() {
@@ -161,7 +158,6 @@ public class BoardTest {
 
         board1.moveDown();
 
-      
         assertEquals(4, board1.getCell(1, 0).getValue());
     }
 
@@ -237,7 +233,6 @@ public class BoardTest {
 
     // IslogisngBoar()
 
-
     @Test
     public void testisLosingBoard2() {
         // caso true
@@ -258,7 +253,7 @@ public class BoardTest {
     }
 
     @Test
-    public void testisLosingBoard3(){
+    public void testisLosingBoard3() {
         Board board1 = new Board(2);
         assertFalse(board1.isLosingBoard());
         board1.setCell(0, 0, new Cell(2));
@@ -267,12 +262,10 @@ public class BoardTest {
         board1.setCell(1, 1, new Cell(2));
         assertFalse(board1.isLosingBoard());
 
-
-
     }
 
-      @Test
-    public void testisLosingBoard4(){
+    @Test
+    public void testisLosingBoard4() {
         Board board1 = new Board(2);
         assertFalse(board1.isLosingBoard());
         board1.setCell(0, 0, new Cell(2));
@@ -281,14 +274,7 @@ public class BoardTest {
         board1.setCell(1, 1, new Cell(8));
         assertFalse(board1.isLosingBoard());
 
-
-
     }
-
-
-
-
-    
 
     @Test
     public void testIsWinningBoardWithHigherValue() {
@@ -486,9 +472,5 @@ public class BoardTest {
         assertTrue(str.contains("8"));
         assertTrue(str.contains("16"));
     }
-
-
-
-    
 
 }
