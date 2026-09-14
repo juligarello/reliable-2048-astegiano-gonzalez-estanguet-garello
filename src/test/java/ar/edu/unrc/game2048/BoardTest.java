@@ -43,7 +43,6 @@ public class BoardTest {
     }
 
     // SetCell
-
     @Test
     public void testSetCell() {
         Board board1 = new Board(4);
