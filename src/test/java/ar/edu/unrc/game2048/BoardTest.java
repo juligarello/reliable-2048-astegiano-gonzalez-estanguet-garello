@@ -122,7 +122,8 @@ public class BoardTest {
         board1.setCell(1, 0, new Cell(2));
         board1.setCell(1, 1, new Cell(2));
 
-        board1.moveUp();
+        boolean moved = board1.moveUp();
+        assertEquals(true, moved);
 
         int count = 0;
         for (int i = 0; i < 2; i++) {
@@ -175,7 +176,6 @@ public class BoardTest {
 
         board2.moveUp();
 
-
         count = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -185,6 +185,7 @@ public class BoardTest {
             }
         }
 
+        assertEquals(8, board2.getScore());
         assertEquals(count, 8);
 
         // PROBAR CUANDO UN MOVEUP NO DEBERIA CAMBIAR EL TABLERO
@@ -200,7 +201,8 @@ public class BoardTest {
         board4.setCell(0, 1, new Cell(2));
         board4.setCell(1, 1, Cell.EMPTY);
 
-        board3.moveUp();
+        boolean noMoved = board3.moveUp();
+        assertEquals(false, noMoved);
         assertEquals(board3, board4);
     }
 
@@ -213,8 +215,8 @@ public class BoardTest {
         board1.setCell(0, 1, Cell.EMPTY);
         board1.setCell(1, 1, Cell.EMPTY);
 
-        board1.moveDown();
-
+        boolean moved = board1.moveDown();
+        assertEquals(true, moved);
         assertEquals(4, board1.getCell(1, 0).getValue());
 
         //Probar columnas que puedan mergear, que no tengan
@@ -257,6 +259,7 @@ public class BoardTest {
             }
         }
 
+        assertEquals(8, board2.getScore());
         assertEquals(count, 8);
 
         // PROBAR CUANDO UN MOVEUP NO DEBERIA CAMBIAR EL TABLERO
@@ -272,7 +275,8 @@ public class BoardTest {
         board4.setCell(0, 1, Cell.EMPTY);
         board4.setCell(1, 1, new Cell(2));
 
-        board3.moveDown();
+        boolean noMoved = board3.moveDown();
+        assertEquals(false, noMoved);
         assertEquals(board3, board4);
     }
 
@@ -285,7 +289,8 @@ public class BoardTest {
         board1.setCell(1, 0, Cell.EMPTY);
         board1.setCell(1, 1, new Cell(2));
 
-        board1.moveLeft();
+        boolean moved = board1.moveLeft();
+        assertEquals(true, moved);
 
         int count = 0;
 
@@ -365,7 +370,8 @@ public class BoardTest {
         board4.setCell(1, 0, new Cell(2));
         board4.setCell(1, 1, Cell.EMPTY);
 
-        board3.moveLeft();
+        boolean noMoved = board3.moveLeft();
+        assertEquals(false, noMoved);
         assertEquals(board3, board4);
     }
 
@@ -378,7 +384,8 @@ public class BoardTest {
         board1.setCell(1, 0, new Cell(2));
         board1.setCell(1, 1, Cell.EMPTY);
 
-        board1.moveRight();
+        boolean moved = board1.moveRight();
+        assertEquals(true, moved);
 
         int count = 0;
 
@@ -458,7 +465,8 @@ public class BoardTest {
         board4.setCell(1, 0, Cell.EMPTY);
         board4.setCell(1, 1, new Cell(2));
 
-        board3.moveRight();
+        boolean noMoved = board3.moveRight();
+        assertEquals(false, noMoved);
         assertEquals(board3, board4);
     }
 
