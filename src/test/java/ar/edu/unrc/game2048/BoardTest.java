@@ -1,12 +1,12 @@
 package ar.edu.unrc.game2048;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 public class BoardTest {
 
@@ -289,26 +289,84 @@ public class BoardTest {
 
         int count = 0;
 
-        if (board1.getCell(0, 0).getValue() == 2) {
+        if(board1.getCell(0, 0).getValue() == 2) {
             count++;
         }
-
-        if (board1.getCell(1, 0).getValue() == 2) {
+        if(board1.getCell(1, 0).getValue() == 2) {
             count++;
         }
 
         assertEquals(count, 2);
 
         count = 0;
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                if (board1.getCell(i, j).getValue() == 2 || board1.getCell(i, j).getValue() == 4) {
+        for(int i = 0; i < 2; i++) {
+            for(int j = 0; j < 2; j++) {
+                if(board1.getCell(i, j).getValue() == 2 || board1.getCell(i, j).getValue() == 4) {
                     count++;
                 }
             }
         }
 
         assertEquals(count, 3);
+
+        // PROBAR COLUMNAS QUE PUEDAN MERGEAR, QUE NO TENGAN QUE MERGEAR Y QUE NO PUEDEN MERGEAR
+
+        Board board2 = new Board(4);
+
+        // Fila 1
+        board2.setCell(0, 0, new Cell(2));
+        board2.setCell(0, 1, new Cell(2));
+        board2.setCell(0, 2, Cell.EMPTY);
+        board2.setCell(0, 3, Cell.EMPTY);
+
+        // Fika 2
+        board2.setCell(1, 0, new Cell(2));
+        board2.setCell(1, 1, Cell.EMPTY);
+        board2.setCell(1, 2, Cell.EMPTY);
+        board2.setCell(1, 3, new Cell(2));
+
+        // Fila 3
+        board2.setCell(2, 0, new Cell(2));
+        board2.setCell(2, 1, new Cell(4));
+        board2.setCell(2, 2, Cell.EMPTY);
+        board2.setCell(2, 3, Cell.EMPTY);
+
+        // Fila 4
+        board2.setCell(3, 0, Cell.EMPTY);
+        board2.setCell(3, 1, Cell.EMPTY);
+        board2.setCell(3, 2, new Cell(8));
+        board2.setCell(3, 3, Cell.EMPTY);
+
+        board2.moveLeft();
+
+        count = 0;
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                if(!board2.getCell(i, j).isEmpty()) {
+                    count++;
+                }
+            }
+        }
+
+        assertEquals(8, board2.getScore());
+        assertEquals(6, count);
+
+        // PROBAR CUANDO MOVELEFT NO DEBERIA CAMBIAR EL TABLERO
+
+        Board board3 = new Board(2);
+        board3.setCell(0, 0, new Cell(2));
+        board3.setCell(0, 1, Cell.EMPTY);
+        board3.setCell(1, 0, new Cell(2));
+        board3.setCell(1, 1, Cell.EMPTY);
+
+        Board board4 = new Board(2);
+        board4.setCell(0, 0, new Cell(2));
+        board4.setCell(0, 1, Cell.EMPTY);
+        board4.setCell(1, 0, new Cell(2));
+        board4.setCell(1, 1, Cell.EMPTY);
+
+        board3.moveLeft();
+        assertEquals(board3, board4);
     }
 
     @Test
@@ -324,26 +382,84 @@ public class BoardTest {
 
         int count = 0;
 
-        if (board1.getCell(0, 1).getValue() == 2) {
+        if(board1.getCell(0, 1).getValue() == 2) {
             count++;
         }
-
-        if (board1.getCell(1, 1).getValue() == 2) {
+        if(board1.getCell(1, 1).getValue() == 2) {
             count++;
         }
 
         assertEquals(count, 2);
 
         count = 0;
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                if (board1.getCell(i, j).getValue() == 2 || board1.getCell(i, j).getValue() == 4) {
+        for(int i = 0; i < 2; i++) {
+            for(int j = 0; j < 2; j++) {
+                if(board1.getCell(i, j).getValue() == 2 || board1.getCell(i, j).getValue() == 4) {
                     count++;
                 }
             }
         }
 
         assertEquals(count, 3);
+
+        // PROBAR COLUMNAS QUE PUEDAN MERGEAR, QUE NO TENGAN QUE MERGEAR Y QUE NO PUEDEN MERGEAR
+
+        Board board2 = new Board(4);
+
+        // Fila 1
+        board2.setCell(0, 0, new Cell(2));
+        board2.setCell(0, 1, new Cell(2));
+        board2.setCell(0, 2, Cell.EMPTY);
+        board2.setCell(0, 3, Cell.EMPTY);
+
+        // Fila 2
+        board2.setCell(1, 0, new Cell(2));
+        board2.setCell(1, 1, Cell.EMPTY);
+        board2.setCell(1, 2, Cell.EMPTY);
+        board2.setCell(1, 3, new Cell(2));
+
+        // Fila 3
+        board2.setCell(2, 0, new Cell(2));
+        board2.setCell(2, 1, new Cell(4));
+        board2.setCell(2, 2, Cell.EMPTY);
+        board2.setCell(2, 3, Cell.EMPTY);
+
+        // Fila 4
+        board2.setCell(3, 0, Cell.EMPTY);
+        board2.setCell(3, 1, Cell.EMPTY);
+        board2.setCell(3, 2, new Cell(8));
+        board2.setCell(3, 3, Cell.EMPTY);
+
+        board2.moveRight();
+
+        count = 0;
+        for(int i = 0; i < 4; i++) {
+            for(int j = 0; j < 4; j++) {
+                if(!board2.getCell(i, j).isEmpty()) {
+                    count++;
+                }
+            }
+        }
+
+        assertEquals(8, board2.getScore());
+        assertEquals(6, count);
+
+        // PROBAR CUANDO MOVER A LA DERECHA NO DEBERIA CAMBIAR EL TABLERO
+
+        Board board3 = new Board(2);
+        board3.setCell(0, 0, Cell.EMPTY);
+        board3.setCell(0, 1, new Cell(2));
+        board3.setCell(1, 0, Cell.EMPTY);
+        board3.setCell(1, 1, new Cell(2));
+
+        Board board4 = new Board(2);
+        board4.setCell(0, 0, Cell.EMPTY);
+        board4.setCell(0, 1, new Cell(2));
+        board4.setCell(1, 0, Cell.EMPTY);
+        board4.setCell(1, 1, new Cell(2));
+
+        board3.moveRight();
+        assertEquals(board3, board4);
     }
 
     // IslogisngBoar()
