@@ -42,24 +42,33 @@ public class Board {
      */
     private int score;
 
+    private Random random;
     /**
      * Creates a new board of the default size (4x4) with two random tiles.
      */
     public Board() {
-        this(DEFAULT_SIZE);
+        this(DEFAULT_SIZE, new Random());
     }
 
+    public Board(int size) {
+        this(size, new Random());                 // no determinista, tamaño custom
+    }
+
+    public Board(long seed) {
+        this(DEFAULT_SIZE, new Random(seed));      // determinista, semilla fija
+    }
     /**
      * Creates a new board of the specified size with two random tiles.
      *
      * @param size the board size (must be > 0)
      * @throws IllegalArgumentException if size <= 0
      */
-    public Board(int size) {
+    private Board(int size, Random random) {
         if (size <= 0) {
             throw new IllegalArgumentException("Board size must be positive: " + size);
         }
         this.size = size;
+        this.random = random;
         this.grid = new Cell[size][size];
         this.score = 0;
         initializeEmpty();
@@ -76,6 +85,7 @@ public class Board {
         this.size = other.size;
         this.grid = new Cell[size][size];
         this.score = other.score;
+        this.random = other.random;
         for (int r = 0; r < size; r++) {
             for (int c = 0; c < size; c++) {
                 this.grid[r][c] = other.grid[r][c];
@@ -477,11 +487,11 @@ public class Board {
         }
 
         // Choose random position
-        int randomIndex = (int) (Math.random() * empty.size());
+        int randomIndex = random.nextInt(empty.size());
         Position pos = empty.stream().skip(randomIndex).findFirst().get();
 
         // 90% chance of 2, 10% chance of 4 (standard 2048 rules)
-        int value = Math.random() < 0.9 ? 2 : 4;
+        int value = random.nextInt(10) < 9 ? 2 : 4;
         grid[pos.row][pos.col] = new Cell(value);
 
         return true;
