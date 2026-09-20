@@ -519,6 +519,16 @@ public class Board {
         if(grid.length != grid[0].length){
             return  false;
         }
+
+
+        for(int i =0; i < size;i++){
+            for(int j = 0; j <size;j++){
+                Cell cell = grid[i][j];
+                if (cell == null || !cell.repOk()) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
     // ==================== UTILITY METHODS ====================
