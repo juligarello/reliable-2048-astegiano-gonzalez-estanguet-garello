@@ -1,5 +1,7 @@
 package ar.edu.unrc.game2048;
 
+import randoop.CheckRep;
+
 import java.util.*;
 
 /**
@@ -497,6 +499,28 @@ public class Board {
         return true;
     }
 
+    @CheckRep
+    public boolean  repOk(){
+        if(random == null){
+            return  false;
+        }
+        if(grid == null){
+            return  false;
+        }
+        if(size <= 0){
+            return  false;
+        }
+        if(score < 0){
+            return false;
+        }
+        if (grid.length != size) {
+            return false;
+        }
+        if(grid.length != grid[0].length){
+            return  false;
+        }
+        return true;
+    }
     // ==================== UTILITY METHODS ====================
 
     /**
