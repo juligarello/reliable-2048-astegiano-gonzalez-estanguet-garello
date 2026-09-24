@@ -49,16 +49,16 @@ public class Board {
      * Creates a new board of the default size (4x4) with two random tiles.
      */
     public Board() {
-<span class="fc" id="L52">        this(DEFAULT_SIZE, new Random());</span>
-<span class="fc" id="L53">    }</span>
+<span class="nc" id="L52">        this(DEFAULT_SIZE, new Random());</span>
+<span class="nc" id="L53">    }</span>
 
     public Board(int size) {
-<span class="fc" id="L56">        this(size, new Random());                 // no determinista, tamaño custom</span>
-<span class="fc" id="L57">    }</span>
+<span class="nc" id="L56">        this(size, new Random());                 // no determinista, tamaño custom</span>
+<span class="nc" id="L57">    }</span>
 
     public Board(long seed) {
-<span class="nc" id="L60">        this(DEFAULT_SIZE, new Random(seed));      // determinista, semilla fija</span>
-<span class="nc" id="L61">    }</span>
+<span class="fc" id="L60">        this(DEFAULT_SIZE, new Random(seed));      // determinista, semilla fija</span>
+<span class="fc" id="L61">    }</span>
     /**
      * Creates a new board of the specified size with two random tiles.
      *
@@ -66,8 +66,8 @@ public class Board {
      * @throws IllegalArgumentException if size &lt;= 0
      */
 <span class="fc" id="L68">    private Board(int size, Random random) {</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (size &lt;= 0) {</span>
-<span class="fc" id="L70">            throw new IllegalArgumentException(&quot;Board size must be positive: &quot; + size);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (size &lt;= 0) {</span>
+<span class="nc" id="L70">            throw new IllegalArgumentException(&quot;Board size must be positive: &quot; + size);</span>
         }
 <span class="fc" id="L72">        this.size = size;</span>
 <span class="fc" id="L73">        this.random = random;</span>
@@ -133,8 +133,8 @@ public class Board {
      * @throws IndexOutOfBoundsException if row or col is out of bounds
      */
     public Cell getCell(int row, int col) {
-<span class="fc" id="L136">        validatePosition(row, col);</span>
-<span class="fc" id="L137">        return grid[row][col];</span>
+<span class="nc" id="L136">        validatePosition(row, col);</span>
+<span class="nc" id="L137">        return grid[row][col];</span>
     }
 
     /**
@@ -148,8 +148,8 @@ public class Board {
      */
     public void setCell(int row, int col, Cell cell) {
 <span class="fc" id="L150">        validatePosition(row, col);</span>
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (cell == null) {</span>
-<span class="fc" id="L152">            throw new IllegalArgumentException(&quot;Cell cannot be null&quot;);</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (cell == null) {</span>
+<span class="nc" id="L152">            throw new IllegalArgumentException(&quot;Cell cannot be null&quot;);</span>
         }
 <span class="fc" id="L154">        grid[row][col] = cell;</span>
 <span class="fc" id="L155">    }</span>
@@ -162,7 +162,7 @@ public class Board {
      * @throws IndexOutOfBoundsException if the position is out of bounds
      */
     private void validatePosition(int row, int col) {
-<span class="pc bpc" id="L165" title="3 of 8 branches missed.">        if (row &lt; 0 || row &gt;= size || col &lt; 0 || col &gt;= size) {</span>
+<span class="fc bfc" id="L165" title="All 8 branches covered.">        if (row &lt; 0 || row &gt;= size || col &lt; 0 || col &gt;= size) {</span>
 <span class="fc" id="L166">            throw new IndexOutOfBoundsException(</span>
 <span class="fc" id="L167">                    String.format(&quot;Position (%d, %d) is out of bounds for board size %d&quot;,</span>
 <span class="fc" id="L168">                            row, col, size));</span>
@@ -192,7 +192,7 @@ public class Board {
      * @return true if there is at least one empty cell
      */
     public boolean hasEmptyCells() {
-<span class="fc bfc" id="L195" title="All 2 branches covered.">        return !getEmptyPositions().isEmpty();</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">        return !getEmptyPositions().isEmpty();</span>
     }
 
     /**
@@ -204,8 +204,8 @@ public class Board {
     public boolean isWinningBoard() {
 <span class="fc bfc" id="L205" title="All 2 branches covered.">        for (int r = 0; r &lt; size; r++) {</span>
 <span class="fc bfc" id="L206" title="All 2 branches covered.">            for (int c = 0; c &lt; size; c++) {</span>
-<span class="fc bfc" id="L207" title="All 2 branches covered.">                if (grid[r][c].getValue() &gt;= WINNING_VALUE) {</span>
-<span class="fc" id="L208">                    return true;</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">                if (grid[r][c].getValue() &gt;= WINNING_VALUE) {</span>
+<span class="nc" id="L208">                    return true;</span>
                 }
             }
         }
@@ -220,26 +220,26 @@ public class Board {
      * @return true if the game is over and the player has lost
      */
     public boolean isLosingBoard() {
-<span class="fc bfc" id="L223" title="All 2 branches covered.">        if (hasEmptyCells()) {</span>
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        if (hasEmptyCells()) {</span>
 <span class="fc" id="L224">            return false;</span>
         }
 
         // Check for possible merges
-<span class="fc bfc" id="L228" title="All 2 branches covered.">        for (int r = 0; r &lt; size; r++) {</span>
-<span class="fc bfc" id="L229" title="All 2 branches covered.">            for (int c = 0; c &lt; size; c++) {</span>
-<span class="fc" id="L230">                Cell current = grid[r][c];</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        for (int r = 0; r &lt; size; r++) {</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">            for (int c = 0; c &lt; size; c++) {</span>
+<span class="nc" id="L230">                Cell current = grid[r][c];</span>
                 // Check right neighbor
-<span class="fc bfc" id="L232" title="All 4 branches covered.">                if (c + 1 &lt; size &amp;&amp; current.canMergeWith(grid[r][c + 1])) {</span>
-<span class="fc" id="L233">                    return false;</span>
+<span class="nc bnc" id="L232" title="All 4 branches missed.">                if (c + 1 &lt; size &amp;&amp; current.canMergeWith(grid[r][c + 1])) {</span>
+<span class="nc" id="L233">                    return false;</span>
                 }
 
                 // Check down neighbor
-<span class="fc bfc" id="L237" title="All 4 branches covered.">                if (r + 1 &lt; size &amp;&amp; current.canMergeWith(grid[r + 1][c])) {</span>
-<span class="fc" id="L238">                    return false;</span>
+<span class="nc bnc" id="L237" title="All 4 branches missed.">                if (r + 1 &lt; size &amp;&amp; current.canMergeWith(grid[r + 1][c])) {</span>
+<span class="nc" id="L238">                    return false;</span>
                 }
             }
         }
-<span class="fc" id="L242">        return true;</span>
+<span class="nc" id="L242">        return true;</span>
     }
 
     /**
@@ -299,8 +299,8 @@ public class Board {
             }
         }
 
-<span class="fc bfc" id="L302" title="All 2 branches covered.">        boolean moved = !this.equals(previous);</span>
-<span class="fc bfc" id="L303" title="All 2 branches covered.">        if (moved) {</span>
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        boolean moved = !this.equals(previous);</span>
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        if (moved) {</span>
 <span class="fc" id="L304">            addRandomTile(); // Add new random tile after successful move</span>
         }
 <span class="fc" id="L306">        return moved;</span>
@@ -403,8 +403,8 @@ public class Board {
             }
         }
 
-<span class="fc bfc" id="L406" title="All 2 branches covered.">        boolean moved = !this.equals(previous);</span>
-<span class="fc bfc" id="L407" title="All 2 branches covered.">        if (moved) {</span>
+<span class="pc bpc" id="L406" title="1 of 2 branches missed.">        boolean moved = !this.equals(previous);</span>
+<span class="pc bpc" id="L407" title="1 of 2 branches missed.">        if (moved) {</span>
 <span class="fc" id="L408">            addRandomTile(); // Add new random tile after successful move</span>
         }
 <span class="fc" id="L410">        return moved;</span>
@@ -542,19 +542,19 @@ public class Board {
      */
     @Override
     public boolean equals(Object o) {
-<span class="fc bfc" id="L545" title="All 2 branches covered.">        if (this == o)</span>
-<span class="fc" id="L546">            return true;</span>
+<span class="pc bpc" id="L545" title="1 of 2 branches missed.">        if (this == o)</span>
+<span class="nc" id="L546">            return true;</span>
 <span class="fc bfc" id="L547" title="All 4 branches covered.">        if (o == null || getClass() != o.getClass())</span>
 <span class="fc" id="L548">            return false;</span>
 <span class="fc" id="L549">        Board board = (Board) o;</span>
-<span class="fc bfc" id="L550" title="All 4 branches covered.">        return size == board.size &amp;&amp;</span>
+<span class="pc bpc" id="L550" title="1 of 4 branches missed.">        return size == board.size &amp;&amp;</span>
                 score == board.score &amp;&amp;
 <span class="fc bfc" id="L552" title="All 2 branches covered.">                Arrays.deepEquals(grid, board.grid);</span>
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L557">        return Objects.hash(size, Arrays.deepHashCode(grid), score);</span>
+<span class="nc" id="L557">        return Objects.hash(size, Arrays.deepHashCode(grid), score);</span>
     }
 
     /**
@@ -590,8 +590,8 @@ public class Board {
     /**
      * Represents a direction on the board.
      */
-<span class="nc" id="L593">    public enum Direction {</span>
-<span class="nc" id="L594">        UP, DOWN, LEFT, RIGHT</span>
+<span class="fc" id="L593">    public enum Direction {</span>
+<span class="fc" id="L594">        UP, DOWN, LEFT, RIGHT</span>
     }
 
     /**
@@ -608,12 +608,12 @@ public class Board {
 
         @Override
         public boolean equals(Object o) {
-<span class="fc bfc" id="L611" title="All 2 branches covered.">            if (this == o)</span>
-<span class="fc" id="L612">                return true;</span>
-<span class="fc bfc" id="L613" title="All 4 branches covered.">            if (o == null || getClass() != o.getClass())</span>
+<span class="pc bpc" id="L611" title="1 of 2 branches missed.">            if (this == o)</span>
+<span class="nc" id="L612">                return true;</span>
+<span class="pc bpc" id="L613" title="1 of 4 branches missed.">            if (o == null || getClass() != o.getClass())</span>
 <span class="fc" id="L614">                return false;</span>
-<span class="fc" id="L615">            Position position = (Position) o;</span>
-<span class="fc bfc" id="L616" title="All 4 branches covered.">            return row == position.row &amp;&amp; col == position.col;</span>
+<span class="nc" id="L615">            Position position = (Position) o;</span>
+<span class="nc bnc" id="L616" title="All 4 branches missed.">            return row == position.row &amp;&amp; col == position.col;</span>
         }
 
         @Override

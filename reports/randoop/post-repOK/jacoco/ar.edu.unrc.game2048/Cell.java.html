@@ -72,10 +72,10 @@ public final class Cell {
      * @return true if the cells can merge, false otherwise
      */
     public boolean canMergeWith(Cell other) {
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (other == null) {</span>
-<span class="fc" id="L76">            throw new NullPointerException();</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (other == null) {</span>
+<span class="nc" id="L76">            throw new NullPointerException();</span>
         }
-<span class="fc bfc" id="L78" title="All 4 branches covered.">        if (this.isEmpty() &amp;&amp; other.isEmpty()) {</span>
+<span class="pc bpc" id="L78" title="1 of 4 branches missed.">        if (this.isEmpty() &amp;&amp; other.isEmpty()) {</span>
 <span class="fc" id="L79">            return false;</span>
         }
 <span class="fc bfc" id="L81" title="All 2 branches covered.">        return this.value == other.value;</span>
@@ -121,7 +121,7 @@ public final class Cell {
      */
     @Override
     public int hashCode() {
-<span class="fc" id="L124">        return Objects.hash(value);</span>
+<span class="nc" id="L124">        return Objects.hash(value);</span>
     }
     
     /**
