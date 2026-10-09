@@ -11,10 +11,12 @@ import java.util.Scanner;
 public class MainCLI {
     private final Board board;
     private final Scanner scanner;
+
     public MainCLI() {
         this.board = new Board();
         this.scanner = new Scanner(System.in);
     }
+
     /**
      * Main game loop.
      */
@@ -63,6 +65,8 @@ public class MainCLI {
                     continue;
             }
 
+            assert board.repOk();
+
             if (moved) {
                 System.out.println("Tile moved!");
             } else {
@@ -81,6 +85,7 @@ public class MainCLI {
     private void displayBoard() {
         System.out.println(board);
     }
+
     public static void main(String[] args) {
         MainCLI game = new MainCLI();
         game.play();
