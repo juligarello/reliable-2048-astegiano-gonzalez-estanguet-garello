@@ -1,9 +1,11 @@
 package ar.edu.unrc.game2048;
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import static org.junit.jupiter.api.Assertions.*;
+
 @DisplayName("Cell Tests")
 public class CellTest {
 
