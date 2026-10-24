@@ -250,7 +250,7 @@ this.random == orig(this.random)
 (return == true)  ==>  (this.score == 0)
 this.size one of { 2, 4 }
 this.size != this.score
-this.grid.getClass().getName() != orig(o.getClass().getName())
+this.grid.getClass().Para lograr esto, divide (split) las observaciones en subconjuntos y reporta invariantes condicionales (los que terminan con ;condition="return == true" o similar).getName() != orig(o.getClass().getName())
 ===========================================================================
 ar.edu.unrc.game2048.Board.equals(java.lang.Object):::EXIT;condition="return == true"
 this.score == 0
