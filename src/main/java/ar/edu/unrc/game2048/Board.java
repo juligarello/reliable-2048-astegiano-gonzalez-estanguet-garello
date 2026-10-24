@@ -56,8 +56,8 @@ public class Board {
         this(size, new Random());                 // no determinista, tamaño custom
     }
 
-    public Board(long seed) {
-        this(DEFAULT_SIZE, new Random(seed));      // determinista, semilla fija
+    public Board(long seed, int size) {
+        this(size, new Random(seed));      // determinista, semilla fija
     }
     /**
      * Creates a new board of the specified size with two random tiles.
@@ -66,8 +66,8 @@ public class Board {
      * @throws IllegalArgumentException if size <= 0
      */
     private Board(int size, Random random) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("Board size must be positive: " + size);
+        if (size <= 0 || size >= 20) {
+            throw new IllegalArgumentException("Board size must be between 1 and 19: " + size);
         }
         this.size = size;
         this.random = random;
