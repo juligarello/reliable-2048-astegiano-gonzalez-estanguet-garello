@@ -77,6 +77,27 @@ Para ver qué técnica sirve mejor para controlar errores, probamos las tres sob
 -Trazas sobre los test manuales
 -Trazas sobre los test de randoop:
 -Trazas sobre  el fuzzer
+
+Manuales:
+```
+java -cp $cp daikon.Chicory `                                                                          
+>>      '--ppt-select-pattern=ar.edu.unrc.game2048.Board|ar.edu.unrc.game2048.Cell' `                                                                                               
+>>      --output-dir=daikon-traces `                                                                                                                                                
+>>      org.junit.runner.JUnitCore `                                                                                                                                                
+>>      ar.edu.unrc.game2048.CellTest `                                                                                                                                             
+>>      ar.edu.unrc.game2048.BoardTest                    
+```
+
+Randoop:
+```
+java -cp $cp daikon.Chicory `                                                               
+>>      '--ppt-select-pattern=ar.edu.unrc.game2048.Board|ar.edu.unrc.game2048.Cell' `                                                                                               
+>>      --output-dir=daikon-traces `                                                                                                                                                
+>>      org.junit.runner.JUnitCore `                                                                                                                                                
+>>      randoopTests.RegressionTest                                
+```
+
+Fuzzer:
 ```
 python3 -c "from fuzzer import RandomFuzzer; print(''.join(RandomFuzzer(50, 100).fuzz() for _ in range(10)))" | \
 java -cp "lib/daikon.jar:target/classes" \
