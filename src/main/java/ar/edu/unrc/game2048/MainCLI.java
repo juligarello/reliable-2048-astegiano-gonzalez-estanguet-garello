@@ -20,6 +20,9 @@ public class MainCLI {
 
         this.scanner = new Scanner(System.in);
         String linea = scanner.nextLine().trim();
+        if(linea.startsWith("[") && linea.endsWith("]")){
+            linea = linea.substring(1, linea.length() - 1).trim();
+        }
         if(linea.isEmpty()){
             throw new IllegalArgumentException("El tablero no puede estar vacío");
         }
