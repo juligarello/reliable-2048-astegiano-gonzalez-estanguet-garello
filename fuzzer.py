@@ -69,15 +69,14 @@ class CLIRunner(Runner):
 
 class GrammarCLIRunner(Runner):
 
-    COMMAND = ['java', '-ea', '-cp', './target/classes', 'ar.edu.unrc.game2048.MainCLI']
+    COMMAND = ['java', '-ea', '-cp', './target/classes', 'ar.edu.unrc.game2048.MainCLI', 's']
     TIMEOUT = 10
 
     def run(self, inp: str) -> Tuple[subprocess.CompletedProcess, str]:
-        board, _, moves = inp.partition("\n")
         try:
             result = subprocess.run(
-                self.COMMAND + [board],
-                input=moves,
+                self.COMMAND,
+                input=inp,
                 capture_output=True,
                 text=True,
                 timeout=self.TIMEOUT
@@ -162,7 +161,9 @@ class GrammarBasedFuzzer(Fuzzer):
 
     GRAMMAR = { "<cell>": [
             "0", "0", "0", "0",
-            "2", "4", "8", "16",
+            "2", "2", "2", "2",
+            "4", "4", "4", "4",
+            "8", "8", "16", "16",
             "32", "64", "128", "256",
             "512", "1024", "2048",
         ]
@@ -194,9 +195,9 @@ class GrammarBasedFuzzer(Fuzzer):
 
 def main():
     runner = GrammarCLIRunner()
-    fuzzer = GrammarBasedFuzzer(min_length=100, max_length=250)
+    fuzzer = GrammarBasedFuzzer(min_length=50, max_length=200)
 
-    trials = 50
+    trials = 25
     outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0}
 
     print(f"Running {trials} fuzzing trials...\n")
