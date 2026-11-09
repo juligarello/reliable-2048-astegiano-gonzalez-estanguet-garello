@@ -67,6 +67,28 @@ class CLIRunner(Runner):
 
         return result, PASS
 
+class GrammarCLIRunner(Runner):
+
+    COMMAND = ['java', '-ea', '-cp', './target/classes', 'ar.edu.unrc.game2048.MainCLI']
+    TIMEOUT = 10
+
+    def run(self, inp: str) -> Tuple[subprocess.CompletedProcess, str]:
+        board, _, moves = inp.partition("\n")
+        try:
+            result = subprocess.run(
+                self.COMMAND + [board],
+                input=moves,
+                capture_output=True,
+                text=True,
+                timeout=self.TIMEOUT
+            )
+        except subprocess.TimeoutExpired:
+            return None, UNRESOLVED
+
+        if result.returncode != 0 or result.stderr:
+            return result, FAIL
+
+        return result, PASS
 
 # ---------------------------------------------------------------------------
 # Fuzzer base class
@@ -128,16 +150,51 @@ class RandomFuzzer(Fuzzer):
 
         Example output for a sequence of 3 moves:
             'w\\na\\nd\\nq\\n'
-        """
+        
         raise NotImplementedError
+        """
+
+# ---------------------------------------------------------------------------
+# GrammarBasedFuzzer
+# ---------------------------------------------------------------------------
+
+class GrammarBasedFuzzer(Fuzzer):
+
+    GRAMMAR = { "<cell>": [
+            "0", "0", "0", "0",
+            "2", "4", "8", "16",
+            "32", "64", "128", "256",
+            "512", "1024", "2048",
+        ]
+    }
+
+    def __init__(self, min_length: int = 10, max_length: int = 50):
+        self.min_length = min_length
+        self.max_length = max_length
+
+    def fuzz(self) -> str:
+        board = "["
+        for i in range(16):
+            if i > 0:
+                board += ","
+            board += random.choice(self.GRAMMAR["<cell>"])
+        board += "]"
+
+        length = random.randint(self.min_length, self.max_length)
+        moves = []
+
+        for _ in range(length):
+            moves.append(random.choice(KEYS))
+
+        return board + "\n" + "\n".join(moves) + "\n" + QUIT + "\n"
 
 # ---------------------------------------------------------------------------
 # Main: run the fuzzer and report results
 # ---------------------------------------------------------------------------
 
 def main():
-    runner = CLIRunner()
-    fuzzer = RandomFuzzer(min_length=100, max_length=250)
+    runner = GrammarCLIRunner()
+    fuzzer = GrammarBasedFuzzer(min_length=100, max_length=250)
 
     trials = 50
     outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0}
