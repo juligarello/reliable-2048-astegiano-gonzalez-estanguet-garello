@@ -583,7 +583,8 @@ this.score >= orig(this.score)
 orig(this.score) != size(this.grid[])-1
 ===========================================================================
 ar.edu.unrc.game2048.Board.moveRight():::EXIT;condition="return == true"
-return == true
+return
+== true
 ===========================================================================
 ar.edu.unrc.game2048.Board.moveRight():::EXIT;condition="not(return == true)"
 this.score == orig(this.score)

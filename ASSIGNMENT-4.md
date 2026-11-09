@@ -245,13 +245,13 @@ In Assignment 2, you wrote `repOK()` methods manually to capture your understand
 
 Reflect on the different oracle sources you have now seen across all four assignments:
 
-| Source | How oracles are produced | Strengths | Weaknesses |
-|---|---|---|---|
-| Manual test assertions | Written by hand | Precise, meaningful | Labour-intensive, may miss cases |
-| `repOK()` | Written by hand | Reusable, always checked | Same limitations as manual |
-| Randoop regression assertions | Observed from a single run | Automatic | Brittle, not meaningful |
-| EvoSuite assertions | Evolved to maximise coverage | Automatic, high coverage | Often regression-style |
-| Daikon invariants | Inferred from many runs | Generalise across executions | Depend on trace quality; may be spurious |
+| Source                        | How oracles are produced     | Strengths                    | Weaknesses                               |
+| ----------------------------- | ---------------------------- | ---------------------------- | ---------------------------------------- |
+| Manual test assertions        | Written by hand              | Precise, meaningful          | Labour-intensive, may miss cases         |
+| `repOK()`                     | Written by hand              | Reusable, always checked     | Same limitations as manual               |
+| Randoop regression assertions | Observed from a single run   | Automatic                    | Brittle, not meaningful                  |
+| EvoSuite assertions           | Evolved to maximise coverage | Automatic, high coverage     | Often regression-style                   |
+| Daikon invariants             | Inferred from many runs      | Generalise across executions | Depend on trace quality; may be spurious |
 
 Which approach produced the most useful oracles for this particular program? Justify your answer.
 
