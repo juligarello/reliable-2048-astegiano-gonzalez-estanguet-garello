@@ -20,6 +20,9 @@ public class MainCLI {
 
         this.scanner = new Scanner(System.in);
         String linea = scanner.nextLine().trim();
+        if(linea.startsWith("[") && linea.endsWith("]")){
+            linea = linea.substring(1, linea.length() - 1).trim();
+        }
         if(linea.isEmpty()){
             throw new IllegalArgumentException("El tablero no puede estar vacío");
         }
@@ -53,7 +56,7 @@ public class MainCLI {
                 }
             }
             int valor = Integer.parseInt(parte);
-            if(!(valor >= 2 && (valor & (valor - 1)) == 0)){
+            if(!(valor >= 2 && (valor & (valor - 1)) == 0) && valor != 0){
                 throw new IllegalArgumentException("Valor inválido para una celda: " + valor);
             }
             int fila = i / size;
