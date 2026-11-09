@@ -53,7 +53,7 @@ public class MainCLI {
                 }
             }
             int valor = Integer.parseInt(parte);
-            if(!(valor >= 2 && (valor & (valor - 1)) == 0)){
+            if(!(valor >= 2 && (valor & (valor - 1)) == 0) || valor != 0){
                 throw new IllegalArgumentException("Valor inválido para una celda: " + valor);
             }
             int fila = i / size;
