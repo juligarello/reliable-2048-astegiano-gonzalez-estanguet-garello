@@ -169,22 +169,26 @@ class GrammarBasedFuzzer(Fuzzer):
         ]
     }
 
-    def __init__(self, min_length: int = 10, max_length: int = 50):
-        self.min_length = min_length
-        self.max_length = max_length
+    def __init__(self, min_moves: int = 10, max_moves: int = 50, min_size: int = 4, max_size: int = 19):
+        self.min_moves = min_moves
+        self.max_moves = max_moves
+        self.min_size = min_size
+        self.max_size = max_size
 
     def fuzz(self) -> str:
+        aux = random.randint(self.min_size, self.max_size)
+        size = aux * aux
         board = "["
-        for i in range(16):
+        for i in range(size):
             if i > 0:
                 board += ","
             board += random.choice(self.GRAMMAR["<cell>"])
         board += "]"
 
-        length = random.randint(self.min_length, self.max_length)
+        length_moves = random.randint(self.min_moves, self.max_moves)
         moves = []
 
-        for _ in range(length):
+        for _ in range(length_moves):
             moves.append(random.choice(KEYS))
 
         return board + "\n" + "\n".join(moves) + "\n" + QUIT + "\n"
@@ -195,9 +199,9 @@ class GrammarBasedFuzzer(Fuzzer):
 
 def main():
     runner = GrammarCLIRunner()
-    fuzzer = GrammarBasedFuzzer(min_length=50, max_length=200)
+    fuzzer = GrammarBasedFuzzer(min_moves=100, max_moves=150, min_size=1, max_size=19)
 
-    trials = 25
+    trials = 50
     outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0}
 
     print(f"Running {trials} fuzzing trials...\n")
