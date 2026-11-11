@@ -20,6 +20,7 @@ from typing import Tuple
 PASS = "PASS"       # program exited normally, no errors reported
 FAIL = "FAIL"       # program signalled a bug (non-zero exit, assertion error)
 UNRESOLVED = "UNRESOLVED"  # e.g. timeout or unexpected error in the runner
+MUTANTE_KILL = "MUTANTE_KILL"  # the mutante was killed by the test
 
 # ---------------------------------------------------------------------------
 # Valid input alphabet
@@ -88,6 +89,31 @@ class GrammarCLIRunner(Runner):
             return result, FAIL
 
         return result, PASS
+
+class MutationCLIRunner(Runner):
+
+    COMMAND = ['java', '-ea', '-cp', './target/classes', 'ar.edu.unrc.game2048.MainCLI', 's']
+    TIMEOUT = 10
+
+    def run(self, inp: str) -> Tuple[subprocess.CompletedProcess, str]:
+        try:
+            result = subprocess.run(
+                self.COMMAND,
+                input=inp,
+                capture_output=True,
+                text=True,
+                timeout=self.TIMEOUT
+            )
+        except subprocess.TimeoutExpired:
+            return None, UNRESOLVED
+
+        if result.returncode == 0 and not result.stderr:
+            return result, PASS
+
+        if "IllegalArgumentException" in result.stderr:
+            return result, MUTANTE_KILL
+
+        return result, FAIL
 
 # ---------------------------------------------------------------------------
 # Fuzzer base class
@@ -165,7 +191,7 @@ class GrammarBasedFuzzer(Fuzzer):
             "4", "4", "4", "4",
             "8", "8", "16", "16",
             "32", "64", "128", "256",
-            "512", "1024", "2048",
+            "512", "1024", "2048"
         ]
     }
 
@@ -197,17 +223,31 @@ class GrammarBasedFuzzer(Fuzzer):
 # Mutator
 # ---------------------------------------------------------------------------
 
-class Mutator:
+class Mutator(Fuzzer):
 
     MUTATION = {
         "operations": ["add", "modify", "delete"],
-        "chars": [ "a", "b", "c", "d", "e",
+        "chars": [ 
+            "a", "b", "c", "d", "e", "d",
             "(", ")", "{", "}", "<", ">",
             "0", "1", "2", "3", "4", "5", 
-            "6", "7", "8", "9", "!", "¡",
+            "6", "7", "8", "9", "!", "¡"
         ]
     }
 
+    def __init__(self, base: Fuzzer, min_mutations: int = 1, max_mutations: int = 3):
+            self.base = base
+            self.min_mutations = min_mutations
+            self.max_mutations = max_mutations
+
+    def fuzz(self) -> str:
+        board, _, moves = self.base.fuzz().partition("\n")
+        self.original = board  
+
+        for _ in range(random.randint(self.min_mutations, self.max_mutations)):
+            board = self.mutate(board)
+
+        return board + "\n" + moves
 
     def mutate(self, inp: str) -> str:
         char = random.choice(self.MUTATION["chars"])
@@ -223,45 +263,50 @@ class Mutator:
             del aux[index - 1]
 
         return "".join(aux)
+
 # ---------------------------------------------------------------------------
 # Main: run the fuzzer and report results
 # ---------------------------------------------------------------------------
 
+# que pasa cuando el mutador agrega 0 delante de un valor valido?
+# si las mutaciones son tantas que generan un valor grande (+10 digitos) el programa se rompe y tira un error de java, es un error?
+# se deben evaluar con PASS o FAIL los casos que generan IllegalArgumentException? (lo deje como MUTANTE_KILL)
+
+# esta correcto no?:
+# Input : [2,32,0,2] s s a s s d s w s s d q
+# Original: [2,32,8,2]
 def main():
-    mutator = Mutator()
-    original = "holaa"
-    print(repr(original))
-    print(repr(mutator.mutate(original)))
-#     runner = GrammarCLIRunner()
-#     fuzzer = GrammarBasedFuzzer(min_moves=100, max_moves=150, min_size=1, max_size=19)
+    runner = MutationCLIRunner()
+    fuzzer = Mutator(GrammarBasedFuzzer(min_moves=10, max_moves=15, min_size=1, max_size=19), min_mutations=1, max_mutations=1)
 
-#     trials = 50
-#     outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0}
+    trials = 25
+    outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0, MUTANTE_KILL: 0}
 
-#     print(f"Running {trials} fuzzing trials...\n")
+    print(f"Running {trials} fuzzing trials...\n")
 
-#     for i in range(trials):
-#         inp = fuzzer.fuzz()
-#         result, outcome = runner.run(inp)
+    for i in range(trials):
+        inp = fuzzer.fuzz()
+        result, outcome = runner.run(inp)
 
-#         outcomes[outcome] += 1
+        outcomes[outcome] += 1
 
-#         print(f"--- Trial {i + 1:>3} | {outcome} ---")
-#         print(f"Input : {inp.replace(chr(10), ' ').strip()}")
+        print(f"--- Trial {i + 1:>3} | {outcome} ---")
+        print(f"Input : {inp.replace(chr(10), ' ').strip()}")
+        print("Original:", fuzzer.original)
 
-#         if result is not None:
-#             print(f"Exit  : {result.returncode}")
-#             if result.stdout:
-#                 print(f"Output: {result.stdout.strip()}")
-#             if result.stderr:
-#                 print(f"Stderr: {result.stderr.strip()}")
+        if result is not None:
+            print(f"Exit  : {result.returncode}")
+            if result.stdout:
+                print(f"Output: {result.stdout.strip()}")
+            if result.stderr:
+                print(f"Stderr: {result.stderr.strip()}")
 
-#         print()
+        print()
 
-#     print("=" * 50)
-#     print("Summary:")
-#     for outcome, count in outcomes.items():
-#         print(f"  {outcome:<12}: {count}/{trials}")
+    print("=" * 50)
+    print("Summary:")
+    for outcome, count in outcomes.items():
+        print(f"  {outcome:<12}: {count}/{trials}")
 
 
 if __name__ == "__main__":
