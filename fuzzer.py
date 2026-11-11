@@ -92,13 +92,19 @@ class GrammarCLIRunner(Runner):
 
 class MutationCLIRunner(Runner):
 
-    COMMAND = ['java', '-ea', '-cp', './target/classes', 'ar.edu.unrc.game2048.MainCLI', 's']
+    BASE = ['java', '-ea', '-cp', './target/classes', 'ar.edu.unrc.game2048.MainCLI']
     TIMEOUT = 10
+
+    def __init__(self, board_mode: bool = True):
+        if board_mode:
+            self.command = self.BASE + ['s']
+        else:
+            self.command = self.BASE
 
     def run(self, inp: str) -> Tuple[subprocess.CompletedProcess, str]:
         try:
             result = subprocess.run(
-                self.COMMAND,
+                self.command,
                 input=inp,
                 capture_output=True,
                 text=True,
@@ -107,11 +113,11 @@ class MutationCLIRunner(Runner):
         except subprocess.TimeoutExpired:
             return None, UNRESOLVED
 
-        if result.returncode == 0 and not result.stderr:
-            return result, PASS
-
         if "IllegalArgumentException" in result.stderr:
             return result, MUTANTE_KILL
+
+        if result.returncode == 0 and not result.stderr:
+            return result, PASS
 
         return result, FAIL
 
@@ -229,9 +235,9 @@ class Mutator(Fuzzer):
         "operations": ["add", "modify", "delete"],
         "chars": [ 
             "a", "b", "c", "d", "e", "d",
-            "(", ")", "{", "}", "<", ">",
+            "(", ")", "{", "}", "[", "]",
             "0", "1", "2", "3", "4", "5", 
-            "6", "7", "8", "9", "!", "¡"
+            "6", "7", "8", "9", ",", "-"
         ]
     }
 
@@ -251,16 +257,18 @@ class Mutator(Fuzzer):
 
     def mutate(self, inp: str) -> str:
         char = random.choice(self.MUTATION["chars"])
+        if not inp:
+            return char
+
         operation = random.choice(self.MUTATION["operations"])
         aux = list(inp)
-        index = random.randint(0, len(inp))
 
         if operation == "add":
-            aux.insert(index, char)
+            aux.insert(random.randint(0, len(inp)), char)
         elif operation == "modify":
-            aux[index - 1] = char
+            aux[random.randint(1, len(aux)) - 1] = char
         else:
-            del aux[index - 1]
+            del aux[random.randint(1, len(aux)) - 1]
 
         return "".join(aux)
 
@@ -268,18 +276,11 @@ class Mutator(Fuzzer):
 # Main: run the fuzzer and report results
 # ---------------------------------------------------------------------------
 
-# que pasa cuando el mutador agrega 0 delante de un valor valido?
-# si las mutaciones son tantas que generan un valor grande (+10 digitos) el programa se rompe y tira un error de java, es un error?
-# se deben evaluar con PASS o FAIL los casos que generan IllegalArgumentException? (lo deje como MUTANTE_KILL)
-
-# esta correcto no?:
-# Input : [2,32,0,2] s s a s s d s w s s d q
-# Original: [2,32,8,2]
 def main():
-    runner = MutationCLIRunner()
-    fuzzer = Mutator(GrammarBasedFuzzer(min_moves=10, max_moves=15, min_size=1, max_size=19), min_mutations=1, max_mutations=1)
+    runner = MutationCLIRunner(board_mode=True)
+    fuzzer = Mutator(GrammarBasedFuzzer(min_moves=1, max_moves=15, min_size=1, max_size=10), min_mutations=1, max_mutations=5)
 
-    trials = 25
+    trials = 50
     outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0, MUTANTE_KILL: 0}
 
     print(f"Running {trials} fuzzing trials...\n")
@@ -292,7 +293,7 @@ def main():
 
         print(f"--- Trial {i + 1:>3} | {outcome} ---")
         print(f"Input : {inp.replace(chr(10), ' ').strip()}")
-        print("Original:", fuzzer.original)
+        print(f"Original: {fuzzer.original}")
 
         if result is not None:
             print(f"Exit  : {result.returncode}")
