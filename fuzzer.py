@@ -194,40 +194,74 @@ class GrammarBasedFuzzer(Fuzzer):
         return board + "\n" + "\n".join(moves) + "\n" + QUIT + "\n"
 
 # ---------------------------------------------------------------------------
+# Mutator
+# ---------------------------------------------------------------------------
+
+class Mutator:
+
+    MUTATION = {
+        "operations": ["add", "modify", "delete"],
+        "chars": [ "a", "b", "c", "d", "e",
+            "(", ")", "{", "}", "<", ">",
+            "0", "1", "2", "3", "4", "5", 
+            "6", "7", "8", "9", "!", "¡",
+        ]
+    }
+
+
+    def mutate(self, inp: str) -> str:
+        char = random.choice(self.MUTATION["chars"])
+        operation = random.choice(self.MUTATION["operations"])
+        aux = list(inp)
+        index = random.randint(0, len(inp))
+
+        if operation == "add":
+            aux.insert(index, char)
+        elif operation == "modify":
+            aux[index - 1] = char
+        else:
+            del aux[index - 1]
+
+        return "".join(aux)
+# ---------------------------------------------------------------------------
 # Main: run the fuzzer and report results
 # ---------------------------------------------------------------------------
 
 def main():
-    runner = GrammarCLIRunner()
-    fuzzer = GrammarBasedFuzzer(min_moves=100, max_moves=150, min_size=1, max_size=19)
+    mutator = Mutator()
+    original = "holaa"
+    print(repr(original))
+    print(repr(mutator.mutate(original)))
+#     runner = GrammarCLIRunner()
+#     fuzzer = GrammarBasedFuzzer(min_moves=100, max_moves=150, min_size=1, max_size=19)
 
-    trials = 50
-    outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0}
+#     trials = 50
+#     outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0}
 
-    print(f"Running {trials} fuzzing trials...\n")
+#     print(f"Running {trials} fuzzing trials...\n")
 
-    for i in range(trials):
-        inp = fuzzer.fuzz()
-        result, outcome = runner.run(inp)
+#     for i in range(trials):
+#         inp = fuzzer.fuzz()
+#         result, outcome = runner.run(inp)
 
-        outcomes[outcome] += 1
+#         outcomes[outcome] += 1
 
-        print(f"--- Trial {i + 1:>3} | {outcome} ---")
-        print(f"Input : {inp.replace(chr(10), ' ').strip()}")
+#         print(f"--- Trial {i + 1:>3} | {outcome} ---")
+#         print(f"Input : {inp.replace(chr(10), ' ').strip()}")
 
-        if result is not None:
-            print(f"Exit  : {result.returncode}")
-            if result.stdout:
-                print(f"Output: {result.stdout.strip()}")
-            if result.stderr:
-                print(f"Stderr: {result.stderr.strip()}")
+#         if result is not None:
+#             print(f"Exit  : {result.returncode}")
+#             if result.stdout:
+#                 print(f"Output: {result.stdout.strip()}")
+#             if result.stderr:
+#                 print(f"Stderr: {result.stderr.strip()}")
 
-        print()
+#         print()
 
-    print("=" * 50)
-    print("Summary:")
-    for outcome, count in outcomes.items():
-        print(f"  {outcome:<12}: {count}/{trials}")
+#     print("=" * 50)
+#     print("Summary:")
+#     for outcome, count in outcomes.items():
+#         print(f"  {outcome:<12}: {count}/{trials}")
 
 
 if __name__ == "__main__":
