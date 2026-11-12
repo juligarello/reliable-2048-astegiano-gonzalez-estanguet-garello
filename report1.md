@@ -59,17 +59,3 @@ public class BoardGetSizeEdgeTest {
     }
 }
 ```
-
-## Verificacion local
-
-- `BoardGetSizeNotDefaultTest`: **violates_assertion**
-  > JUnit version 4.13.2
-- `BoardGetSizeEdgeTest`: **violates_assertion**
-  > JUnit version 4.13.2
-
-## Metadata
-
-- Modelo: `cohere/north-mini-code:free` (gratuito, costo 0 USD)
-- Verificacion: `javac` + JUnit 4 / sonda sobre el mutante
-
-> La herramienta provee feedback; la decision de refinar la asercion es del usuario.
