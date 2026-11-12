@@ -5,7 +5,7 @@
 - **Metodo:** `Cell mergeWith(Cell other)` | **Direccion:** falso negativo (demasiado debil)
 - **Asercion:** `Cell r = c.mergeWith(other); r.getValue() >= 2 && (r.getValue() & (r.getValue() - 1)) == 0`
 - **Invariante Daikon:** `return.value is a power of 2` en `ar.edu.unrc.game2048.Cell.mergeWith(ar.edu.unrc.game2048.Cell):::EXIT`
-- **Observacion:** La postcondicion solo exige que el resultado sea una potencia de 2. Es demasiado debil: un mutante que devuelva this (o new Cell(this.value)) la satisface, aunque la semantica correcta de mergeWith es duplicar el valor. Falta la relacion return.value == 2 * this.value.
+- **Observacion:** La postcondicion solo exige que el resultado sea una potencia de 2. Es demasiado debil: un mutante que devuelva this (o new Cell(this.value)) la satisface, aunque la semantica correcta de mergeWith es duplicar el valor. Falta la relacion return.value == 2 \* this.value.
 
 ## Analisis del LLM
 
@@ -19,7 +19,7 @@ The assertion only guarantees the result is a power of two (≥2). It does not e
 
 Returns this instead of a new doubled cell.
 
-*Sobrevive porque:* The assertion only checks power‑of‑two, not value doubling.
+_Sobrevive porque:_ The assertion only checks power‑of‑two, not value doubling.
 
 ```json
 [
@@ -34,7 +34,7 @@ Returns this instead of a new doubled cell.
 
 Returns a copy of this cell, not the doubled value.
 
-*Sobrevive porque:* The weak assertion still passes because the copy is a power of two.
+_Sobrevive porque:_ The weak assertion still passes because the copy is a power of two.
 
 ```json
 [
@@ -70,10 +70,3 @@ public class OasisProbe {
   > RESULT=true
 - `return_copy`: **survives**
   > RESULT=true
-
-## Metadata
-
-- Modelo: `cohere/north-mini-code:free` (gratuito, costo 0 USD)
-- Verificacion: `javac` + JUnit 4 / sonda sobre el mutante
-
-> La herramienta provee feedback; la decision de refinar la asercion es del usuario.

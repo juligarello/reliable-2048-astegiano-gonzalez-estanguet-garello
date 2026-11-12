@@ -59,3 +59,10 @@ public class BoardGetSizeEdgeTest {
     }
 }
 ```
+
+## Verificacion local
+
+- `BoardGetSizeNotDefaultTest`: **violates_assertion**
+  >JUnit version 4.13.2
+- `BoardGetSizeEdgeTest`: **violates_assertion**
+  >JUnit version 4.13.2
