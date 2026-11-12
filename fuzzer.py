@@ -20,6 +20,7 @@ from typing import Tuple
 PASS = "PASS"       # program exited normally, no errors reported
 FAIL = "FAIL"       # program signalled a bug (non-zero exit, assertion error)
 UNRESOLVED = "UNRESOLVED"  # e.g. timeout or unexpected error in the runner
+MUTANTE_KILL = "MUTANTE_KILL"  # the mutante was killed by the test
 
 # ---------------------------------------------------------------------------
 # Valid input alphabet
@@ -88,6 +89,37 @@ class GrammarCLIRunner(Runner):
             return result, FAIL
 
         return result, PASS
+
+class MutationCLIRunner(Runner):
+
+    BASE = ['java', '-ea', '-cp', './target/classes', 'ar.edu.unrc.game2048.MainCLI']
+    TIMEOUT = 10
+
+    def __init__(self, board_mode: bool = True):
+        if board_mode:
+            self.command = self.BASE + ['s']
+        else:
+            self.command = self.BASE
+
+    def run(self, inp: str) -> Tuple[subprocess.CompletedProcess, str]:
+        try:
+            result = subprocess.run(
+                self.command,
+                input=inp,
+                capture_output=True,
+                text=True,
+                timeout=self.TIMEOUT
+            )
+        except subprocess.TimeoutExpired:
+            return None, UNRESOLVED
+
+        if "IllegalArgumentException" in result.stderr:
+            return result, MUTANTE_KILL
+
+        if result.returncode == 0 and not result.stderr:
+            return result, PASS
+
+        return result, FAIL
 
 # ---------------------------------------------------------------------------
 # Fuzzer base class
@@ -165,7 +197,7 @@ class GrammarBasedFuzzer(Fuzzer):
             "4", "4", "4", "4",
             "8", "8", "16", "16",
             "32", "64", "128", "256",
-            "512", "1024", "2048",
+            "512", "1024", "2048"
         ]
     }
 
@@ -194,15 +226,62 @@ class GrammarBasedFuzzer(Fuzzer):
         return board + "\n" + "\n".join(moves) + "\n" + QUIT + "\n"
 
 # ---------------------------------------------------------------------------
+# Mutator
+# ---------------------------------------------------------------------------
+
+class Mutator(Fuzzer):
+
+    MUTATION = {
+        "operations": ["add", "modify", "delete"],
+        "chars": [ 
+            "a", "b", "c", "d", "e", "d",
+            "(", ")", "{", "}", "[", "]",
+            "0", "1", "2", "3", "4", "5", 
+            "6", "7", "8", "9", ",", "-"
+        ]
+    }
+
+    def __init__(self, base: Fuzzer, min_mutations: int = 1, max_mutations: int = 3):
+            self.base = base
+            self.min_mutations = min_mutations
+            self.max_mutations = max_mutations
+
+    def fuzz(self) -> str:
+        board, _, moves = self.base.fuzz().partition("\n")
+        self.original = board  
+
+        for _ in range(random.randint(self.min_mutations, self.max_mutations)):
+            board = self.mutate(board)
+
+        return board + "\n" + moves
+
+    def mutate(self, inp: str) -> str:
+        char = random.choice(self.MUTATION["chars"])
+        if not inp:
+            return char
+
+        operation = random.choice(self.MUTATION["operations"])
+        aux = list(inp)
+
+        if operation == "add":
+            aux.insert(random.randint(0, len(inp)), char)
+        elif operation == "modify":
+            aux[random.randint(1, len(aux)) - 1] = char
+        else:
+            del aux[random.randint(1, len(aux)) - 1]
+
+        return "".join(aux)
+
+# ---------------------------------------------------------------------------
 # Main: run the fuzzer and report results
 # ---------------------------------------------------------------------------
 
 def main():
-    runner = GrammarCLIRunner()
-    fuzzer = GrammarBasedFuzzer(min_moves=100, max_moves=150, min_size=1, max_size=19)
+    runner = MutationCLIRunner(board_mode=True)
+    fuzzer = Mutator(GrammarBasedFuzzer(min_moves=1, max_moves=15, min_size=1, max_size=10), min_mutations=1, max_mutations=5)
 
     trials = 50
-    outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0}
+    outcomes = {PASS: 0, FAIL: 0, UNRESOLVED: 0, MUTANTE_KILL: 0}
 
     print(f"Running {trials} fuzzing trials...\n")
 
@@ -214,6 +293,7 @@ def main():
 
         print(f"--- Trial {i + 1:>3} | {outcome} ---")
         print(f"Input : {inp.replace(chr(10), ' ').strip()}")
+        print(f"Original: {fuzzer.original}")
 
         if result is not None:
             print(f"Exit  : {result.returncode}")
